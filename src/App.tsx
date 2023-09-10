@@ -2,7 +2,7 @@ import type { FC } from 'react';
 
 import type { TResultItem } from './utils';
 
-import { useCallback, useRef } from 'react';
+import { Fragment, useCallback, useRef } from 'react';
 
 import { convertMinutesToHuman, useList, useMappedValue, useValue } from './utils';
 
@@ -54,12 +54,24 @@ const App: FC = () => {
         <button onClick={handleClear}>Clear</button>
       </div>
       <div className="total">Total: {total}</div>
-      <h2>Detail List</h2>
-      <ul className="history-list">
-        {historyList.map((v) => (
-          <li key={v.id}>{`${v.begin} - ${v.end} => ${v.total}`}</li>
+      <div className="history-list">
+        <div>No.</div>
+        <div>Begin</div>
+        <div />
+        <div>End</div>
+        <div />
+        <div>Duration</div>
+        {historyList.map((v, i) => (
+          <Fragment key={v.id}>
+            <div>{i}.</div>
+            <div>{v.begin}</div>
+            <div>-</div>
+            <div>{v.end}</div>
+            <div>{'=>'}</div>
+            <div>{v.total}</div>
+          </Fragment>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
