@@ -1,8 +1,9 @@
 import type { Observable } from 'rxjs';
+import type { MutableRefObject } from 'react';
 
 import dayjs from 'dayjs';
-import { merge, Subject } from 'rxjs';
-import { scan, map } from 'rxjs/operators';
+import { fromEvent, merge, Subject } from 'rxjs';
+import { scan, map, debounceTime } from 'rxjs/operators';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 export type TResultItem = {
@@ -73,4 +74,25 @@ export const useList = () => {
   );
 
   return [list$, handlePushNew, handleReset] as const;
+};
+
+export const useAutoFcous = (
+  firstRef: MutableRefObject<HTMLInputElement>,
+  secendRef: MutableRefObject<HTMLInputElement>,
+) => {
+  useEffect(() => {
+    const focusSubscription = fromEvent(window, 'focus')
+      .pipe(debounceTime(30))
+      .subscribe(() => {
+        const firstValue = firstRef.current.value.trim();
+        const secondValue = secendRef.current.value.trim();
+        if (!firstValue && !secondValue) {
+          firstRef.current.focus();
+        } else if (firstValue && !secondValue) {
+          secendRef.current.focus();
+        }
+      });
+
+    return () => focusSubscription.unsubscribe();
+  }, [firstRef, secendRef]);
 };

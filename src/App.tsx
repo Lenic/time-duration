@@ -4,7 +4,7 @@ import type { TResultItem } from './utils';
 
 import { Fragment, useCallback, useRef } from 'react';
 
-import { convertMinutesToHuman, useList, useMappedValue, useValue } from './utils';
+import { convertMinutesToHuman, useList, useMappedValue, useValue, useAutoFcous } from './utils';
 
 import './App.less';
 
@@ -19,6 +19,8 @@ const App: FC = () => {
 
   const beginRef = useRef({} as HTMLInputElement);
   const endRef = useRef({} as HTMLInputElement);
+
+  useAutoFcous(beginRef, endRef);
 
   const handleReset = useCallback(() => {
     beginRef.current.value = '';
