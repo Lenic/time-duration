@@ -96,3 +96,13 @@ export const useAutoFcous = (
     return () => focusSubscription.unsubscribe();
   }, [firstRef, secendRef]);
 };
+
+export const usePageBlur = (callback: () => unknown) => {
+  const [blur$] = useState(() => fromEvent(window, 'blur').pipe(debounceTime(30)));
+
+  useEffect(() => {
+    const subscription = blur$.subscribe(() => void callback());
+
+    return () => subscription.unsubscribe();
+  }, [blur$, callback]);
+};

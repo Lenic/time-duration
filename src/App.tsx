@@ -4,7 +4,7 @@ import type { TResultItem } from './utils';
 
 import { Fragment, useCallback, useRef } from 'react';
 
-import { convertMinutesToHuman, useList, useMappedValue, useValue, useAutoFcous } from './utils';
+import { convertMinutesToHuman, useList, useMappedValue, useValue, useAutoFcous, usePageBlur } from './utils';
 
 import './App.less';
 
@@ -36,10 +36,14 @@ const App: FC = () => {
   }, [handleReset, reset]);
 
   const handleCalc = useCallback(() => {
-    push(beginRef.current.value.trim(), endRef.current.value.trim());
+    const beginValue = beginRef.current.value.trim();
+    const endValue = endRef.current.value.trim();
+    if (!beginValue || !endValue) return;
 
+    push(beginValue, endValue);
     handleReset();
   }, [handleReset, push]);
+  usePageBlur(handleCalc);
 
   return (
     <div className="container">
